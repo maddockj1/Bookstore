@@ -3,14 +3,24 @@ import './App.css';
 import Header from '../header/header'
 import Footer from '../footer/footer'
 import BookList from '../BookList/BookList'
+import Cart from '../cart/cart'
 
 class App extends Component {
   constructor(props){
     super(props)
     this.state = {
-      books:[]
+      books:[],
+      cart: []
     }
 
+  }
+  addToCart = (values) => {
+    console.log(values)
+    return this.setState({
+      ...this.state,
+      cart: this.state.cart.concat(values)
+    })
+    
   }
   async componentDidMount(){
     const response = await fetch('http://localhost:8082/api/books');
@@ -21,12 +31,17 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
+      <div className = "App">
       <Header/>
-      
-      <BookList item = {this.state.books}/>
-      
-
+      <div className = "row">
+      <BookList item = {this.state.books} addToCart={this.addToCart}/>
+      <div className = "list-group-item">
+            <div className = "col-md-6">
+            <h4><u>Cart</u></h4>
+      <Cart addToCart={this.addToCart} item ={this.state.cart}/>
+      </div>
+      </div>
+      </div>
       <Footer/>
       </div>
     );
